@@ -37,25 +37,28 @@ Two repos:
   Each locale entry needs a matching `sanityKey` if the site's `LocaleCode`
   differs from the Studio field id (e.g. site code `zh-tw` ↔ Sanity key `zhHant`).
 
-## Current status (2026-07-21)
-All 6 build phases are done and deployed. The site currently runs on
-**placeholder content**: 12 picsum.photos stock images (seeded via
-`scripts/seed.ts`, ids `photo-seed-*`), photographer name "Nick Studio",
-email `hello@example.com`. **Swap these for Nick's real photos and bio
-before calling this launched** — either have Nick self-serve in the Studio
-(delete the seed docs, add real `photo` docs, edit Site Settings), or run a
-similar seed script with real assets.
+## Current status (2026-07-26)
+All 6 build phases are done and deployed, and the site is running on
+**Nick's real photos** — 254 of them, imported in bulk from a local folder
+(`scripts/import-nick-photos.ts`, titles authored per-photo by vision
+subagents and merged into `scripts/photo-titles/all-titles.json`) across
+four albums: Landscape (133), Portrait (90), Street (23), Black & White (8,
+a new category). The 12 `photo-seed-*` picsum placeholders are gone
+(`scripts/delete-seed-photos.ts`). Display order was randomized within each
+category (`scripts/shuffle-order.ts`) so near-identical burst shots aren't
+shown back-to-back — re-run it any time to reshuffle. Photographer name/bio
+in Site Settings is still placeholder ("Nick Studio" / generic bio/email)
+and should be swapped for the real thing whenever Nick provides it.
+
+The **Sanity → Cloudflare deploy webhook is now set up** (as of 2026-07-26,
+webhook id `HTc6TcvEedjJSPmO`, dataset `production`, triggers on
+create/update/delete, POSTs to a Cloudflare Pages deploy hook) — publishing
+in the Studio rebuilds the live site automatically within a minute or two.
+No more manual `git push`/dashboard-retry needed for content-only changes.
+(Verify with `npx sanity hooks list` from this repo if it's ever in doubt.)
 
 ### Still pending
-- **Sanity → Cloudflare deploy webhook** (Jeremy explicitly deferred this
-  multiple times — always worth asking if it's been done yet before
-  assuming). Without it, publishing in the Studio does NOT rebuild the
-  site; someone has to `git push` or manually retry the Cloudflare deploy.
-  Setup: Cloudflare dashboard → Workers & Pages → photo-portfolio →
-  Settings → Builds & deployments → Deploy hooks → create one → paste its
-  URL into a new webhook at sanity.io/manage/project/ludvuc61 → API →
-  Webhooks (dataset `production`, trigger create/update/delete, POST).
-- Real photos/content (see above).
+- Real photographer bio/contact email in Site Settings (see above).
 - Custom domain not yet configured (site's `astro.config.mjs` `site:` value
   points at the `.pages.dev` URL; update it and hreflang/canonical follow
   automatically if a custom domain is added later).
