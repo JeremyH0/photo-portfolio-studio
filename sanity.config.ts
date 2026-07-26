@@ -23,7 +23,12 @@ export default defineConfig({
               S,
               context,
             }),
-            S.documentTypeListItem('category').title('Categories'),
+            orderableDocumentListDeskItem({
+              type: 'category',
+              title: 'Categories',
+              S,
+              context,
+            }),
             S.listItem()
               .title('Site Settings')
               .id('siteSettings')
