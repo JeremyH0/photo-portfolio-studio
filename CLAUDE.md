@@ -26,7 +26,8 @@ Two repos:
 ## Sanity data model
 - `photo` document: image (hotspot enabled), title, optional caption,
   category reference, orderRank (drag-sortable in Studio)
-- `category` document: title, slug — doubles as the site's "album" concept
+- `category` document: title, slug, orderRank (drag-sortable) — doubles as
+  the site's "album" concept
 - `siteSettings` singleton: photographerName, bio, contact email, social links
 - Languages: `schemaTypes/supportedLanguages.ts` is the single source of
   truth — currently `en` (default), `ja`, `zh` (Simplified), `zhHant`
@@ -37,31 +38,74 @@ Two repos:
   Each locale entry needs a matching `sanityKey` if the site's `LocaleCode`
   differs from the Studio field id (e.g. site code `zh-tw` ↔ Sanity key `zhHant`).
 
-## Current status (2026-07-26)
-All 6 build phases are done and deployed, and the site is running on
-**Nick's real photos** — 254 of them, imported in bulk from a local folder
-(`scripts/import-nick-photos.ts`, titles authored per-photo by vision
-subagents and merged into `scripts/photo-titles/all-titles.json`) across
-four albums: Landscape (133), Portrait (90), Street (23), Black & White (8,
-a new category). The 12 `photo-seed-*` picsum placeholders are gone
-(`scripts/delete-seed-photos.ts`). Display order was randomized within each
-category (`scripts/shuffle-order.ts`) so near-identical burst shots aren't
-shown back-to-back — re-run it any time to reshuffle. Photographer name/bio
-in Site Settings is still placeholder ("Nick Studio" / generic bio/email)
-and should be swapped for the real thing whenever Nick provides it.
+## Current status (2026-09-29)
+Built, deployed, and running on **Nick's real content**: 254 photos across
+four albums — Landscape (133), Portrait (90), Street (23), Black & White (8).
+Imported in bulk from a local folder tree (`scripts/import-nick-photos.ts`);
+every title was written per-photo by vision subagents looking at the actual
+image, since Nick supplied only camera filenames — those live in
+`scripts/photo-titles/all-titles.json`. The 12 `photo-seed-*` picsum
+placeholders are gone.
 
-The **Sanity → Cloudflare deploy webhook is now set up** (as of 2026-07-26,
-webhook id `HTc6TcvEedjJSPmO`, dataset `production`, triggers on
-create/update/delete, POSTs to a Cloudflare Pages deploy hook) — publishing
-in the Studio rebuilds the live site automatically within a minute or two.
-No more manual `git push`/dashboard-retry needed for content-only changes.
-(Verify with `npx sanity hooks list` from this repo if it's ever in doubt.)
+**Album order** (what visitors see): Landscape → Portrait → Street →
+Black & White. Both `photo` and `category` documents carry an `orderRank` and
+are drag-sortable in the Studio's "Photos" and "Categories" panels (wired via
+`orderableDocumentListDeskItem` in `sanity.config.ts`). Photo order is
+randomized *within* each album so near-identical burst shots aren't adjacent.
+
+**Publishing is automatic**: a Sanity webhook (id `HTc6TcvEedjJSPmO`, dataset
+`production`, fires on create/update/delete) POSTs to a Cloudflare Pages
+deploy hook, so publishing in the Studio rebuilds the live site within a
+minute or two — no git push needed for content-only changes. Verify with
+`npx sanity hooks list` if it's ever in doubt.
+
+**Handover docs for Nick** (non-technical owner's guide — the two links, how
+to add a photo, costs, troubleshooting):
+- `HANDOVER.md` in this repo — plain text, version-controlled.
+- Published page (styled to match the site; this is the link to send Nick):
+  https://claude.ai/code/artifact/70fb7cc8-c3fa-4e26-8c85-29630349c6d6
 
 ### Still pending
-- Real photographer bio/contact email in Site Settings (see above).
+- Real photographer name/bio/contact email in Site Settings — still the
+  placeholder "Nick Studio" / generic bio / `hello@example.com`. Swap these
+  before calling the site launched.
 - Custom domain not yet configured (site's `astro.config.mjs` `site:` value
   points at the `.pages.dev` URL; update it and hreflang/canonical follow
   automatically if a custom domain is added later).
+- **Unconfirmed**: whether Nick has been invited to the Sanity project. He
+  needs a member invite (sanity.io/manage → project `ludvuc61` → Members,
+  role Editor) before he can log into the Studio at all. Worth checking
+  rather than assuming — the handover guide tells him to just sign in.
+
+## Scripts
+Run from this repo: `npx sanity exec scripts/<name>.ts --with-user-token`
+
+| Script | What it does |
+| --- | --- |
+| `import-nick-photos.ts` | Bulk-imports a local folder tree (one subfolder per album) — uploads assets, creates `photo` docs, matches/creates categories by slug. Titles come from `photo-titles/`. Deterministic IDs (hash of relative path) so re-running skips what exists. Supports `-- --dry-run`. |
+| `shuffle-order.ts` | Re-randomizes photo order within each album. Safe to re-run any time. |
+| `order-categories.ts` | Seeded the album display order. Edit the array and re-run to change it in bulk (or just drag in the Studio). |
+| `fix-photo-block-order.ts` | Re-lays photo `orderRank` so albums appear in category order in the gallery's "All" view, *without* reshuffling within albums. Run if "All" ever groups albums wrongly. |
+| `delete-seed-photos.ts` | Deleted the 12 picsum placeholders. Historical — kept as a record. |
+| `seed.ts` | Original picsum placeholder seed. Historical — its documents no longer exist. |
+| `add-zh-hant.ts` | One-off: added zhHant translations to the seeded content. Historical. |
+
+## Gotchas worth not rediscovering
+- **Sanity's default sort is by `_id`**, not creation order. That's why Black
+  & White sorted first before categories had an `orderRank` —
+  `category-black-and-white` precedes `category-landscape` alphabetically.
+  Any list the site renders needs an explicit `order()` in the GROQ query.
+- **Category order and photo order are separate things.** Fixing the album
+  *switcher* order does nothing to the photo grid's "All" view, which sorts
+  by each photo's own `orderRank`. Both were wrong once, for this reason.
+- **New photos added in the Studio land at the end of the "All" view**, not
+  inside their album's block, because `orderRank` is global across photos.
+  Expected behaviour, not a bug — they still group correctly when filtered.
+- **Git pushes can fail with `403 ... denied to pmsadmin-hc`.** This machine
+  has two GitHub accounts in the keychain; `JeremyH0` is the one with write
+  access. Check `gh auth status` and switch the active account if rejected.
+- The scratchpad is wiped between sessions — anything worth keeping goes in a
+  repo or a published artifact, not `/tmp`.
 
 ## Rules
 - Images ALWAYS through the Sanity image pipeline (optimized WebP + lazy
