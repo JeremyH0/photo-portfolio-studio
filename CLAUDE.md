@@ -18,7 +18,8 @@ Two repos:
 - **Cloudflare Pages** hosting, auto-deploy from GitHub on push to `main`
 
 ## Live URLs
-- Site: https://photo-portfolio-d1s.pages.dev
+- Site: https://nickhuangphoto.com (Cloudflare Pages project `nickhuangphoto`
+  in Nick's own Cloudflare account; Jeremy is a Super Administrator member)
 - Studio: https://photo-portfolio-ludvuc61.sanity.studio
 - Sanity project: `ludvuc61` / dataset `production`
 - GitHub: `JeremyH0/photo-portfolio` and `JeremyH0/photo-portfolio-studio`
@@ -55,7 +56,8 @@ randomized *within* each album so near-identical burst shots aren't adjacent.
 
 **Publishing is automatic**: a Sanity webhook (id `HTc6TcvEedjJSPmO`, dataset
 `production`, fires on create/update/delete) POSTs to a Cloudflare Pages
-deploy hook, so publishing in the Studio rebuilds the live site within a
+deploy hook (named "Nick" on the `nickhuangphoto` project — re-pointed
+2026-10-10 when the project moved to Nick's account), so publishing in the Studio rebuilds the live site within a
 minute or two — no git push needed for content-only changes. Verify with
 `npx sanity hooks list` if it's ever in doubt.
 
@@ -69,9 +71,6 @@ to add a photo, costs, troubleshooting):
 - Real photographer name/bio/contact email in Site Settings — still the
   placeholder "Nick Studio" / generic bio / `hello@example.com`. Swap these
   before calling the site launched.
-- Custom domain not yet configured (site's `astro.config.mjs` `site:` value
-  points at the `.pages.dev` URL; update it and hreflang/canonical follow
-  automatically if a custom domain is added later).
 - **Unconfirmed**: whether Nick has been invited to the Sanity project. He
   needs a member invite (sanity.io/manage → project `ludvuc61` → Members,
   role Editor) before he can log into the Studio at all. Worth checking

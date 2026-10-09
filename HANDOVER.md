@@ -8,7 +8,7 @@ next can see exactly what the owner was told.
 
 ## The two links
 
-- **Your site** — https://photo-portfolio-d1s.pages.dev
+- **Your site** — https://nickhuangphoto.com
 - **Editor** — https://photo-portfolio-ludvuc61.sanity.studio
 
 The editor is Sanity Studio. Everything on the site — photos, titles, album
@@ -44,7 +44,7 @@ a half-finished edit can never break the public site.
 | --- | --- | --- |
 | Cloudflare Pages | Serves the site | Free |
 | Sanity | Stores photos and text | Free |
-| Custom domain | Optional | ~$10–20/yr |
+| nickhuangphoto.com | Your web address (Cloudflare) | ~$10–11/yr, renews automatically each October |
 
 Free tiers, not trials. Currently ~1.6 GB of a 100 GB asset allowance and a few
 hundred of 10,000 allowed documents — thousands of photos of headroom.
@@ -75,6 +75,3 @@ Fuller engineering notes live in `CLAUDE.md` in each repo.
 
 - Site Settings still holds placeholder photographer bio and contact email
   (`hello@example.com`) — replace with Nick's real details.
-- No custom domain configured; site runs on the `.pages.dev` URL. If one is
-  added later, update `site:` in the site repo's `astro.config.mjs` so
-  canonical/hreflang tags follow.
