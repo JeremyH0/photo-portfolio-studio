@@ -69,7 +69,8 @@ to add a photo, costs, troubleshooting):
 
 ### Still pending
 - Real photographer name/bio/contact email in Site Settings — still the
-  placeholder "Nick Studio" / generic bio / `hello@example.com`. Swap these
+  placeholder generic bio / `hello@example.com` (name is now "Nick Huang",
+  set 2026-10-16). Swap these
   before calling the site launched.
 - **Unconfirmed**: whether Nick has been invited to the Sanity project. He
   needs a member invite (sanity.io/manage → project `ludvuc61` → Members,
