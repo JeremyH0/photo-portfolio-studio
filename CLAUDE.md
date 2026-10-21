@@ -72,10 +72,18 @@ to add a photo, costs, troubleshooting):
   placeholder generic bio / `hello@example.com` (name is now "Nick Huang",
   set 2026-10-16). Swap these
   before calling the site launched.
-- **Unconfirmed**: whether Nick has been invited to the Sanity project. He
-  needs a member invite (sanity.io/manage → project `ludvuc61` → Members,
-  role Editor) before he can log into the Studio at all. Worth checking
-  rather than assuming — the handover guide tells him to just sign in.
+- Nick IS a Sanity member: the project has two, Jeremy and "黃于展"
+  (Administrator) — checked 2026-10-16 via the projects API; Jeremy to confirm
+  that account is Nick's. Jeremy sent him a plain-text "how to edit" message.
+- The published handover page above still shows the old
+  `photo-portfolio-d1s.pages.dev` link (HANDOVER.md is current) — republish
+  it from HANDOVER.md if Jeremy asks.
+- Domain: Nick had to click Cloudflare's "Verify your contact information"
+  email by ~2026-10-24 (registered 2026-10-09) or the domain is suspended.
+  If the site suddenly stops resolving, check `whois nickhuangphoto.com` for
+  `clientHold` first. FortiGuard (Jeremy's network) blocks it as a "Newly
+  Registered Domain" until ~early Nov 2026 or a re-categorisation request at
+  fortiguard.com/webfilter.
 
 ## Scripts
 Run from this repo: `npx sanity exec scripts/<name>.ts --with-user-token`
