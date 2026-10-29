@@ -25,8 +25,19 @@ Two repos:
 - GitHub: `JeremyH0/photo-portfolio` and `JeremyH0/photo-portfolio-studio`
 
 ## Sanity data model
-- `photo` document: image (hotspot enabled), title, optional caption,
-  category reference, orderRank (drag-sortable in Studio)
+- `photo` document: image (hotspot enabled; `metadata` includes `exif`, never
+  `location`), title, optional caption, category reference (labelled
+  "Album"), `takenAt` "Date taken" (date), orderRank (drag-sortable)
+- **Date taken**: `TakenAtInput` (`schemaTypes/components/`) fills it from the
+  asset's `metadata.exif.DateTimeOriginal` once per image (clearing it sticks)
+  and offers "Use that date" when they differ. Sanity strips EXIF from the
+  stored file and only extracts it when the image field asks, so photos
+  uploaded before 2026-10-29 had none: `backfill-taken-dates.ts` filled 240
+  from the AirDropped originals in `../Nick's-Photos` (Sony A7 III EXIF). 9
+  have no camera date (iPhone IMG_8157–8164 + an Instagram download) and
+  stay empty. **Re-uploading an identical file reuses the old asset** (sha1
+  dedupe), which has no EXIF — the field then says "no camera date". The site
+  doesn't use takenAt yet (Jeremy: wait until every photo has a date).
 - `category` document: title, slug, orderRank (drag-sortable) — doubles as
   the site's "album" concept
 - `siteSettings` singleton: photographerName, bio, contact email, social links
@@ -39,9 +50,10 @@ Two repos:
   Each locale entry needs a matching `sanityKey` if the site's `LocaleCode`
   differs from the Studio field id (e.g. site code `zh-tw` ↔ Sanity key `zhHant`).
 
-## Current status (2026-09-29)
-Built, deployed, and running on **Nick's real content**: 254 photos across
-four albums — Landscape (133), Portrait (90), Street (23), Black & White (8).
+## Current status (2026-10-29)
+Built, deployed, and running on **Nick's real content**: 248 published photos
+across four albums — Landscape (127), Portrait (90), Street (23), Black &
+White (8) — and Nick now adds/removes photos himself.
 Imported in bulk from a local folder tree (`scripts/import-nick-photos.ts`);
 every title was written per-photo by vision subagents looking at the actual
 image, since Nick supplied only camera filenames — those live in
@@ -50,8 +62,17 @@ placeholders are gone.
 
 **Album order** (what visitors see): Landscape → Portrait → Street →
 Black & White. Both `photo` and `category` documents carry an `orderRank` and
-are drag-sortable in the Studio's "Photos" and "Categories" panels (wired via
-`orderableDocumentListDeskItem` in `sanity.config.ts`). Photo order is
+are drag-sortable (`orderableDocumentListDeskItem` in `sanity.config.ts`).
+**Studio menu** (Nick asked to find photos per album): *Photos by album* —
+built live from the categories (async child, so new albums appear with no
+code change), one orderable list per album filtered by `category._ref`, its
+**+** opens the `photo-in-album` template that pre-fills the album; *All
+photos* — recently added first, sortable by date taken; *Albums (names &
+order)*; *Site Settings*. `tidyMenu()` strips the plugin's "Reset Order" and
+"Toggle Increments" (one mis-click re-ranks everything) from every list.
+Filtered lists still rank globally — fine, the site orders within an album.
+`@sanity/icons` v5 has no root exports: import each icon from its subpath
+(`@sanity/icons/Folder`). Photo order is
 randomized *within* each album so near-identical burst shots aren't adjacent.
 
 **Publishing is automatic**: a Sanity webhook (id `HTc6TcvEedjJSPmO`, dataset
@@ -72,6 +93,8 @@ to add a photo, costs, troubleshooting):
   placeholder generic bio / `hello@example.com` (name is now "Nick Huang",
   set 2026-10-16). Swap these
   before calling the site launched.
+- "Snowlit Path" (`drafts.91fca8bc-…`, Landscape, added 2026-10-24) is
+  still an unpublished draft — Nick may have forgotten to press Publish.
 - Nick IS a Sanity member: the project has two, Jeremy and "黃于展"
   (Administrator) — checked 2026-10-16 via the projects API; Jeremy to confirm
   that account is Nick's. Jeremy sent him a plain-text "how to edit" message.
@@ -87,10 +110,16 @@ to add a photo, costs, troubleshooting):
 
 ## Scripts
 Run from this repo: `npx sanity exec scripts/<name>.ts --with-user-token`
+(top-level `await` doesn't compile there — wrap in `main()`). **Bulk patches
+fire the deploy webhook once per published document**: pause it first
+(sanity.io/manage → API → Webhooks; the hooks API field is
+`isDisabledByUser`). It wasn't paused for the 2026-10-29 backfill — Cloudflare
+answered most of the ~240 deliveries 304 and rebuilt a handful of times.
 
 | Script | What it does |
 | --- | --- |
 | `import-nick-photos.ts` | Bulk-imports a local folder tree (one subfolder per album) — uploads assets, creates `photo` docs, matches/creates categories by slug. Titles come from `photo-titles/`. Deterministic IDs (hash of relative path) so re-running skips what exists. Supports `-- --dry-run`. |
+| `backfill-taken-dates.ts` | Fills empty `takenAt` from EXIF in the local originals (matched by import ID, then filename; drafts included). Safe to re-run; supports `-- --dry-run`. |
 | `shuffle-order.ts` | Re-randomizes photo order within each album. Safe to re-run any time. |
 | `order-categories.ts` | Seeded the album display order. Edit the array and re-run to change it in bulk (or just drag in the Studio). |
 | `fix-photo-block-order.ts` | Re-lays photo `orderRank` so albums appear in category order in the gallery's "All" view, *without* reshuffling within albums. Run if "All" ever groups albums wrongly. |

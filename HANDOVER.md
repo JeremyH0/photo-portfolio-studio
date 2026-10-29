@@ -14,29 +14,43 @@ next can see exactly what the owner was told.
 The editor is Sanity Studio. Everything on the site — photos, titles, album
 names, bio — is edited there and nowhere else.
 
+## Finding a photo
+
+- **Photos by album** — one list per album (Landscape, Portrait, …), with the
+  number of photos in each. New albums show up here by themselves.
+- **All photos** — every photo, most recently added first. The sort button at the
+  top of the list can sort by date taken instead.
+- The 🔍 search at the top left finds a photo by its title.
+
 ## Adding a photo
 
-1. Open the editor, choose **Photos**.
-2. Click **Create new**.
+1. Open the editor → **Photos by album** → the album it belongs in.
+2. Click **+** at the top of the list. The album is already filled in.
 3. Drag the image file onto the image box. Add an English title (the only
    required text). Caption and translations are optional — blank translations
    fall back to English.
-4. Pick an album: Landscape, Portrait, Street, or Black & White.
+4. **Date taken** fills itself in from the camera info in the file. If it
+   stays empty (some phone or Instagram images have no camera date), pick the
+   date yourself, or leave it empty.
 5. Click **Publish**. The site updates itself within a minute or two. New
-   photos appear at the end of the gallery.
+   photos appear at the end of their album.
 
 Nothing is live until Publish is pressed — until then it's a private draft, so
 a half-finished edit can never break the public site.
 
 ## Other changes
 
-- **Reorder photos or albums** — drag up/down in the Photos or Categories list;
-  that order is what visitors see.
-- **Remove a photo** — open it, Delete. (Permanent. To hide without losing it,
-  drag it to the end instead.)
-- **New album** — Categories → Create new, add a title, click Generate for the
-  slug. Appears at the end; only shows on the site once it has ≥1 photo.
-- **Name, bio, contact email, Instagram link** — Site Settings.
+- **Reorder photos** — drag them up/down inside their album; that order is
+  what visitors see. **Reorder or rename albums** — Albums (names & order).
+- **Move a photo to another album** — open it and change **Album**.
+- **Fix a date** — open the photo and change **Date taken**. If the camera
+  date differs, a "Use that date" button appears next to it.
+- **Remove a photo** — open it, ⋯ menu next to Publish → Delete (permanent).
+  To take it off the site but keep it, choose **Unpublish** instead.
+- **New album** — Albums (names & order) → +, add a title, click Generate for
+  the slug. Appears at the end; only shows on the site once it has ≥1 photo.
+  An album that still has photos can't be deleted — move or delete them first.
+- **Name, bio, contact email** — Site Settings.
 
 ## Running costs
 
