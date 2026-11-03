@@ -71,6 +71,12 @@ photos* — recently added first, sortable by date taken; *Albums (names &
 order)*; *Site Settings*. `tidyMenu()` strips the plugin's "Reset Order" and
 "Toggle Increments" (one mis-click re-ranks everything) from every list.
 Filtered lists still rank globally — fine, the site orders within an album.
+Deployed to the hosted Studio 2026-11-03 (`npx sanity deploy` — the auto-mode
+classifier blocks it unless Jeremy explicitly asks; the hosted URL now opens
+inside the sanity.io dashboard, so a token in localStorage doesn't log a test
+browser in — verify Studio UI on `sanity dev` at localhost:3333 instead, which
+accepts `__studio_auth_token_ludvuc61`). Nick was sent a short message about
+the album menu, auto date and the All photos sort.
 `@sanity/icons` v5 has no root exports: import each icon from its subpath
 (`@sanity/icons/Folder`). Photo order is
 randomized *within* each album so near-identical burst shots aren't adjacent.
@@ -87,6 +93,7 @@ to add a photo, costs, troubleshooting):
 - `HANDOVER.md` in this repo — plain text, version-controlled.
 - Published page (styled to match the site; this is the link to send Nick):
   https://claude.ai/code/artifact/70fb7cc8-c3fa-4e26-8c85-29630349c6d6
+  (also https://claude.ai/artifact/ExBzruiHEc8Qp291ksdbws)
 
 ### Still pending
 - Real photographer name/bio/contact email in Site Settings — still the
@@ -98,9 +105,11 @@ to add a photo, costs, troubleshooting):
 - Nick IS a Sanity member: the project has two, Jeremy and "黃于展"
   (Administrator) — checked 2026-10-16 via the projects API; Jeremy to confirm
   that account is Nick's. Jeremy sent him a plain-text "how to edit" message.
-- The published handover page above still shows the old
-  `photo-portfolio-d1s.pages.dev` link (HANDOVER.md is current) — republish
-  it from HANDOVER.md if Jeremy asks.
+- The published handover page was republished 2026-11-03 (v2: new domain,
+  album menu, dates, sort). Its share link is pinned to a version: viewers
+  only see v2 once Jeremy moves the pin (page → Share menu). Rebuild it from
+  the artifact's own HTML (fonts are embedded data URIs) — edit the text
+  sections only.
 - Domain: Nick had to click Cloudflare's "Verify your contact information"
   email by ~2026-10-24 (registered 2026-10-09) or the domain is suspended.
   If the site suddenly stops resolving, check `whois nickhuangphoto.com` for

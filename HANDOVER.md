@@ -18,8 +18,11 @@ names, bio — is edited there and nowhere else.
 
 - **Photos by album** — one list per album (Landscape, Portrait, …), with the
   number of photos in each. New albums show up here by themselves.
-- **All photos** — every photo, most recently added first. The sort button at the
-  top of the list can sort by date taken instead.
+- **All photos** — every photo, most recently added first. The sort button at
+  the top right of the list switches to **Date taken, newest first**, **Date
+  taken, oldest first** or back to **Recently added**. This only changes the
+  order in the editor, not on the website. (Album lists can't be sorted by
+  date — they always show the website order, changed by dragging.)
 - The 🔍 search at the top left finds a photo by its title.
 
 ## Adding a photo
