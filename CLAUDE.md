@@ -50,7 +50,7 @@ Two repos:
   Each locale entry needs a matching `sanityKey` if the site's `LocaleCode`
   differs from the Studio field id (e.g. site code `zh-tw` ↔ Sanity key `zhHant`).
 
-## Current status (2026-10-29)
+## Current status (checked 2026-11-09)
 Built, deployed, and running on **Nick's real content**: 248 published photos
 across four albums — Landscape (127), Portrait (90), Street (23), Black &
 White (8) — and Nick now adds/removes photos himself.
@@ -101,7 +101,8 @@ to add a photo, costs, troubleshooting):
   set 2026-10-16). Swap these
   before calling the site launched.
 - "Snowlit Path" (`drafts.91fca8bc-…`, Landscape, added 2026-10-24) is
-  still an unpublished draft — Nick may have forgotten to press Publish.
+  still an unpublished draft (checked 2026-11-09) — Nick may have forgotten
+  to press Publish.
 - Nick IS a Sanity member: the project has two, Jeremy and "黃于展"
   (Administrator) — checked 2026-10-16 via the projects API; Jeremy to confirm
   that account is Nick's. Jeremy sent him a plain-text "how to edit" message.
@@ -110,12 +111,12 @@ to add a photo, costs, troubleshooting):
   only see v2 once Jeremy moves the pin (page → Share menu). Rebuild it from
   the artifact's own HTML (fonts are embedded data URIs) — edit the text
   sections only.
-- Domain: Nick had to click Cloudflare's "Verify your contact information"
-  email by ~2026-10-24 (registered 2026-10-09) or the domain is suspended.
-  If the site suddenly stops resolving, check `whois nickhuangphoto.com` for
-  `clientHold` first. FortiGuard (Jeremy's network) blocks it as a "Newly
-  Registered Domain" until ~early Nov 2026 or a re-categorisation request at
-  fortiguard.com/webfilter.
+- Domain: whois on 2026-11-09 shows it ACTIVE (no `clientHold`), expiring
+  2027-10-09 with auto-renew, so the contact-verification email was handled.
+  If the site ever stops resolving, check `whois nickhuangphoto.com` for
+  `clientHold` first. FortiGuard (Jeremy's network) blocked it as a "Newly
+  Registered Domain" — expected to lift ~a month after registration; if it
+  still blocks, request re-categorisation at fortiguard.com/webfilter.
 
 ## Scripts
 Run from this repo: `npx sanity exec scripts/<name>.ts --with-user-token`
